@@ -136,8 +136,12 @@ export default function Home() {
           <img data-test-id="meme-image" src={imageURL} alt="Italian Trulli" />
           <div className="action">
             {/* generate button  */}
-            <button onClick={generate} className="action-button">
-              Generator
+            <button
+              onClick={generate}
+              className="action-button"
+              data-test-id="generate-meme"
+            >
+              Generate
             </button>
             {/* Download Button  */}
             <button onClick={dowloadhandler} className="action-button">
