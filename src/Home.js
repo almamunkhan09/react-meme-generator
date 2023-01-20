@@ -30,38 +30,52 @@ export default function Home() {
   const [bottomText, setBottomText] = useState('');
   const [topText, setTopText] = useState('');
 
-  // We want to track the texts on input change
-  const trackBottomText = (event) => {
-    const rawBottomText = event.target.value
-      .replaceAll('#', '~h')
-      .replaceAll('?', '~q')
-      .replaceAll('/', '~s');
-
-    setBottomText(rawBottomText);
-  };
-  const trackTopText = (event) => {
-    const rawTopText = event.target.value
-      .replaceAll('#', '~h')
-      .replaceAll('?', '~q')
-      .replaceAll('/', '~s');
-    setTopText(rawTopText);
-  };
-
   // Define the slected template to have info about background selection by the user;
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     'https://api.memegen.link/images/awesome.png',
   );
+  // Image url to display the preview of the image and further download
+  const [imageURL, setImageURL] = useState(
+    'https://api.memegen.link/images/awesome.png',
+  );
+
+  // We want to track the texts on input change
+  const trackBottomText = (event) => {
+    setBottomText(event.target.value);
+    const rawBottomText = event.target.value
+      .replaceAll('#', '~h')
+      .replaceAll('?', '~q')
+      .replaceAll('/', '~s');
+    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
+    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
+    const newURl = `${blankURL}/${topText ? topText : '_'}/${
+      // Generate a new url having top text bottom text
+      rawBottomText ? rawBottomText : '_'
+    }/${fileType}`;
+
+    setImageURL(newURl); // Set image url to show in the preview
+  };
+  const trackTopText = (event) => {
+    setTopText(event.target.value);
+    const rawTopText = event.target.value
+      .replaceAll('#', '~h')
+      .replaceAll('?', '~q')
+      .replaceAll('/', '~s');
+    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
+    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
+    const newURl = `${blankURL}/${rawTopText ? rawTopText : '_'}/${
+      // Generate a new url having top text bottom text
+      bottomText ? bottomText : '_'
+    }/${fileType}`;
+
+    setImageURL(newURl); // Set image url to show in the preview
+  };
 
   // Then need to track the slected background
   const trackSelection = (event) => {
     setSelectedTemplate(event.target.value);
   };
-
-  // Image url to display the preview of the image and further download
-  const [imageURL, setImageURL] = useState(
-    'https://api.memegen.link/images/awesome.png',
-  );
 
   // The function to generate the preview set the image url based on the user's selected background
 
@@ -72,7 +86,7 @@ export default function Home() {
       // Generate a new url having top text bottom text
       bottomText ? bottomText : '_'
     }/${fileType}`;
-    console.log(topText, bottomText);
+
     setImageURL(newURl); // Set image url to show in the preview
   };
 
