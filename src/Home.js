@@ -58,7 +58,7 @@ export default function Home() {
 
   // Image url to display the preview of the image and further download
   const [imageURL, setImageURL] = useState(
-    'https://api.memegen.link/images/buzz.gif',
+    'https://api.memegen.link/images/awesome.png',
   );
 
   // The function to generate the preview set the image url based on the user's selected background
@@ -120,7 +120,7 @@ export default function Home() {
           {/* Select background  */}
           <label htmlFor="template">
             {' '}
-            Templates
+            Meme template
             {apiData.length ? (
               <select
                 className="selectItem"
