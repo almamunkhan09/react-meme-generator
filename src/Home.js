@@ -32,10 +32,19 @@ export default function Home() {
 
   // We want to track the texts on input change
   const trackBottomText = (event) => {
-    setBottomText(event.target.value);
+    const rawBottomText = event.target.value
+      .replaceAll('#', '~h')
+      .replaceAll('?', '~q')
+      .replaceAll('/', '~s');
+
+    setBottomText(rawBottomText);
   };
   const trackTopText = (event) => {
-    setTopText(event.target.value);
+    const rawTopText = event.target.value
+      .replaceAll('#', '~h')
+      .replaceAll('?', '~q')
+      .replaceAll('/', '~s');
+    setTopText(rawTopText);
   };
 
   // Define the slected template to have info about background selection by the user;
@@ -63,6 +72,7 @@ export default function Home() {
       // Generate a new url having top text bottom text
       bottomText ? bottomText : '_'
     }/${fileType}`;
+    console.log(topText, bottomText);
     setImageURL(newURl); // Set image url to show in the preview
   };
 
@@ -74,7 +84,11 @@ export default function Home() {
   const dowloadhandler = () => {
     const fileName = imageURL
       .replace('https://api.memegen.link/images/', '') // We need to find the image name from the url
-      .replace(/\//gm, '');
+      .replace(/\//gm, '')
+      .replaceAll('~h', '#')
+      .replaceAll('~s', '/')
+      .replaceAll('/[_]/g', ' /[ ]/g');
+    console.log(fileName);
     saveAs(imageURL, fileName);
   };
 
