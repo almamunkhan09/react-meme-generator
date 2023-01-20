@@ -1,5 +1,5 @@
 // Import Packages
-import './Home.css'; // Import css file
+import './Home.scss'; // Import css file
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import { useEffect, useState } from 'react';
