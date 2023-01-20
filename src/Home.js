@@ -49,7 +49,9 @@ export default function Home() {
 
   // Define the slected template to have info about background selection by the user;
 
-  const [selectedTemplate, setSelectedTemplate] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    'https://api.memegen.link/images/awesome.png',
+  );
 
   // Then need to track the slected background
   const trackSelection = (event) => {
