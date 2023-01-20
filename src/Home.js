@@ -104,34 +104,42 @@ export default function Home() {
         <form className="card-form" onSubmit={handleSubmit}>
           {/* Input for top text */}
           <div className="input-flex">
-            <label htmlFor="Top text"> Top text</label>
-            <input className="input-field" onChange={trackTopText} />
+            <label htmlFor="Top text">
+              {' '}
+              Top text <input className="input-field" onChange={trackTopText} />
+            </label>
           </div>
           {/* input for bottom text  */}
           <div className="input-flex">
-            <label htmlFor="Bottom text"> Bottom text</label>
-            <input className="input-field" onChange={trackBottomText} />
+            <label htmlFor="Bottom text">
+              {' '}
+              Bottom text{' '}
+              <input className="input-field" onChange={trackBottomText} />
+            </label>
           </div>
           {/* Select background  */}
           <div className="input-flex">
-            <label htmlFor="Templates"> Templates</label>
+            <label htmlFor="Templates">
+              {' '}
+              Templates
+              {apiData.length ? (
+                <select
+                  name="cars"
+                  id="cars"
+                  className="selectItem"
+                  onChange={trackSelection}
+                >
+                  {' '}
+                  <option>Select Templates</option>
+                  {apiData.map((obj) => (
+                    <option key={obj.value} value={obj.value}>
+                      {obj.label}
+                    </option>
+                  ))}
+                </select>
+              ) : null}
+            </label>
             {/* loopinf through api data  */}
-            {apiData.length ? (
-              <select
-                name="cars"
-                id="cars"
-                className="selectItem"
-                onChange={trackSelection}
-              >
-                {' '}
-                <option>Select Templates</option>
-                {apiData.map((obj) => (
-                  <option key={obj.value} value={obj.value}>
-                    {obj.label}
-                  </option>
-                ))}
-              </select>
-            ) : null}
           </div>
           <img data-test-id="meme-image" src={imageURL} alt="Italian Trulli" />
           <div className="action">

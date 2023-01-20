@@ -9,7 +9,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   line-height: 1.5;
   background-color: #f1f3fb;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 img {
@@ -36,14 +36,14 @@ img {
 .card-image {
   border-radius: 8px;
   overflow: hidden;
-  padding-bottom: 30%;
+  padding-bottom: 20%;
   background-image: url('https://assets.codepen.io/285131/coffee_1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-size: 100%;
   background-position: 0 5%;
   position: relative;
-  min-height: 200px;
+  max-height: 200px;
 }
 
 .card-heading {
