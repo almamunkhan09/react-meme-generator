@@ -49,9 +49,7 @@ export default function Home() {
 
   // Define the slected template to have info about background selection by the user;
 
-  const [selectedTemplate, setSelectedTemplate] = useState(
-    'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
-  );
+  const [selectedTemplate, setSelectedTemplate] = useState('');
 
   // Then need to track the slected background
   const trackSelection = (event) => {
@@ -60,7 +58,7 @@ export default function Home() {
 
   // Image url to display the preview of the image and further download
   const [imageURL, setImageURL] = useState(
-    'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
+    'https://api.memegen.link/images/buzz.gif',
   );
 
   // The function to generate the preview set the image url based on the user's selected background
