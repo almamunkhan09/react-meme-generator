@@ -1,40 +1,13 @@
-import './Home.scss';
+// Import Packages
+import './Home.scss'; // Import css file
 import axios from 'axios';
+import { saveAs } from 'file-saver';
 import { useEffect, useState } from 'react';
-import { MyComponent } from './CustomSelect';
-
-// const templatesURL = 'https://api.memegen.link/templates/';
 
 export default function Home() {
-  const [bottomText, setBottomText] = useState('');
-  const [topText, setTopText] = useState('');
-  const [apiData, setApiData] = useState([]);
-  // const [slectedTemplate, setSelectedTemplate] = useState(
-  //   'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
-  // );
-  const [imageURL, setImageURL] = useState(
-    'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
-  );
-
-  const trackBottomText = (event) => {
-    setBottomText(event.target.value);
-  };
-  const trackTopText = (event) => {
-    setTopText(event.target.value);
-  };
-  const trackSelection = (event) => {
-    const blankURL = event.target.value.replace(/.(?:jpg|gif|png)$/, '');
-    const fileType = event.target.value.replace(blankURL, '');
-    const newURl = `${blankURL}/${topText ? topText : '_'}/${
-      bottomText ? bottomText : '_'
-    }/${fileType}`;
-    console.log(newURl);
-    console.log(blankURL);
-    // if (top) setImageURL(event.target.value);
-
-    // + (topText ? topText : '_' ) + '/' + (bottomText ? bottomText: '_'+);
-    setImageURL(newURl);
-  };
+  // First load the Api Data when the DOM is loaded for first time
+  const [apiData, setApiData] = useState([]); // Define the apidata variable to see if the data is loaded
+  // If Api data is loaded then we will show the the slect options for template/Background selection
 
   useEffect(() => {
     axios
@@ -52,9 +25,61 @@ export default function Home() {
       .catch((err) => console.log(err));
   }, []);
 
+  // We need to track the top tecxt and bottom text given by the user.
+  // Define top text and bottom text
+  const [bottomText, setBottomText] = useState('');
+  const [topText, setTopText] = useState('');
+
+  // We want to track the texts on input change
+  const trackBottomText = (event) => {
+    setBottomText(event.target.value);
+  };
+  const trackTopText = (event) => {
+    setTopText(event.target.value);
+  };
+
+  // Define the slected template to have info about background selection by the user;
+
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
+  );
+
+  // Then need to track the slected background
+  const trackSelection = (event) => {
+    setSelectedTemplate(event.target.value);
+  };
+
+  // Image url to display the preview of the image and further download
+  const [imageURL, setImageURL] = useState(
+    'https://api.memegen.link/images/buzz/memes/memes_everywhere.gif',
+  );
+
+  // The function to generate the preview set the image url based on the user's selected background
+
+  const generate = () => {
+    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
+    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
+    const newURl = `${blankURL}/${topText ? topText : '_'}/${
+      // Generate a new url having top text bottom text
+      bottomText ? bottomText : '_'
+    }/${fileType}`;
+    setImageURL(newURl); // Set image url to show in the preview
+  };
+
+  // Handle submit form
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  const dowloadhandler = () => {
+    const fileName = imageURL
+      .replace('https://api.memegen.link/images/', '') // We need to find the image name from the url
+      .replace(/\//gm, '');
+    saveAs(imageURL, fileName);
+  };
+
   return (
     <div>
-      {console.log(apiData)}
       <div className="card">
         <div className="card-image">
           <h2 className="card-heading">
@@ -62,18 +87,21 @@ export default function Home() {
             <small>Create your custom meme</small>
           </h2>
         </div>
-        <form className="card-form">
+        <form className="card-form" onSubmit={handleSubmit}>
+          {/* Input for top text */}
           <div className="input-flex">
             <label htmlFor="Top text"> Top text</label>
-
             <input className="input-field" onChange={trackTopText} />
           </div>
+          {/* input for bottom text  */}
           <div className="input-flex">
             <label htmlFor="Bottom text"> Bottom text</label>
             <input className="input-field" onChange={trackBottomText} />
           </div>
+          {/* Select background  */}
           <div className="input-flex">
             <label htmlFor="Templates"> Templates</label>
+            {/* loopinf through api data  */}
             {apiData.length ? (
               <select
                 name="cars"
@@ -93,7 +121,12 @@ export default function Home() {
           </div>
           <img data-test-id="meme-image" src={imageURL} alt="Italian Trulli" />
           <div className="action">
-            <button readOnly className="action-button">
+            {/* generate button  */}
+            <button onClick={generate} className="action-button">
+              Generator
+            </button>
+            {/* Download Button  */}
+            <button onClick={dowloadhandler} className="action-button">
               Download
             </button>
           </div>
