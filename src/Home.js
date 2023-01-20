@@ -103,23 +103,30 @@ export default function Home() {
         </div>
         <form className="card-form" onSubmit={handleSubmit}>
           {/* Input for top text */}
-          <label htmlFor="Top text">Top text</label>
-          <input className="input-field" onChange={trackTopText} />
+          <label htmlFor="top-text">Top text</label>
+          <input
+            className="input-field"
+            id="top-text"
+            onChange={trackTopText}
+          />
 
           {/* input for bottom text  */}
 
-          <label htmlFor="Bottom text">Bottom text</label>
-          <input className="input-field" onChange={trackBottomText} />
+          <label htmlFor="bottom-text">Bottom text</label>
+          <input
+            className="input-field"
+            id="bottom-text"
+            onChange={trackBottomText}
+          />
           <br />
           {/* Select background  */}
-          <label htmlFor="Templates">
+          <label htmlFor="template">
             {' '}
             Templates
             {apiData.length ? (
               <select
-                name="cars"
-                id="cars"
                 className="selectItem"
+                id="template"
                 onChange={trackSelection}
               >
                 {' '}
