@@ -46,7 +46,9 @@ export default function Home() {
     const rawBottomText = event.target.value
       .replaceAll('#', '~h')
       .replaceAll('?', '~q')
-      .replaceAll('/', '~s');
+      .replaceAll('/', '~s')
+      .replace('%', '~p')
+      .replace('/ /g', '%20');
     const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
     const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
     const newURl = `${blankURL}/${topText ? topText : '_'}/${
