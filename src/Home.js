@@ -51,7 +51,7 @@ export default function Home() {
       currentTopText ? newCurrentTopText : '_'
     }/${currentBottomText ? newCurrentBottomText : '_'}.png`;
     const newUrlArray = newUrl.split(' ');
-    const finalUrl = newUrlArray.join('-');
+    const finalUrl = newUrlArray.join('_');
     return finalUrl;
   };
 
