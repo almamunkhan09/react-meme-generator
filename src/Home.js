@@ -51,7 +51,7 @@ export default function Home() {
       currentTopText ? newCurrentTopText : '_'
     }/${currentBottomText ? newCurrentBottomText : '_'}.png`;
     const newUrlArray = newUrl.split(' ');
-    const finalUrl = newUrlArray.join('_');
+    const finalUrl = newUrlArray.join(' ');
     return finalUrl;
   };
 
@@ -136,7 +136,7 @@ export default function Home() {
               ))}
             </select>
           ) : null}
-
+          {console.log(imageUrl)}
           <img data-test-id="meme-image" src={imageUrl} alt="Italian Trulli" />
           <div className="action">
             {/* generate button  */}
