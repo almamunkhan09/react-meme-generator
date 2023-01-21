@@ -46,15 +46,14 @@ export default function Home() {
     const rawBottomText = event.target.value
       .replaceAll('#', '~h')
       .replaceAll('?', '~q')
-      .replaceAll('/', '~s')
-      .replace('%', '~p')
-      .replace('/ /g', '%20');
+      .replaceAll('/', '~s');
+
     const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
     const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
     const newURl = `${blankURL}/${topText ? topText : '_'}/${
       // Generate a new url having top text bottom text
       rawBottomText ? rawBottomText : '_'
-    }/${fileType}`;
+    }${fileType}`;
 
     setImageURL(newURl); // Set image url to show in the preview
   };
@@ -69,8 +68,8 @@ export default function Home() {
     const newURl = `${blankURL}/${rawTopText ? rawTopText : '_'}/${
       // Generate a new url having top text bottom text
       bottomText ? bottomText : '_'
-    }/${fileType}`;
-
+    }${fileType}`;
+    console.log(imageURL);
     setImageURL(newURl); // Set image url to show in the preview
   };
 
@@ -87,7 +86,7 @@ export default function Home() {
     const newURl = `${blankURL}/${topText ? topText : '_'}/${
       // Generate a new url having top text bottom text
       bottomText ? bottomText : '_'
-    }/${fileType}`;
+    }${fileType}`;
 
     setImageURL(newURl); // Set image url to show in the preview
   };
@@ -136,13 +135,13 @@ export default function Home() {
           />
           <br />
           {/* Select background  */}
-          <label htmlFor="template">
+          <label htmlFor="memetemplate">
             {' '}
             Meme template
             {apiData.length ? (
               <select
                 className="selectItem"
-                id="template"
+                id="memetemplate"
                 onChange={trackSelection}
               >
                 {' '}
@@ -155,7 +154,7 @@ export default function Home() {
               </select>
             ) : null}
           </label>
-
+          {console.log(imageURL)}
           <img data-test-id="meme-image" src={imageURL} alt="Italian Trulli" />
           <div className="action">
             {/* generate button  */}
