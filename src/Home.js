@@ -17,7 +17,7 @@ export default function Home() {
 
         const requiredData = [];
         data.map((obj) =>
-          requiredData.push({ value: obj.blank, label: obj.name }),
+          requiredData.push({ value: obj.id, label: obj.name }),
         );
         return requiredData;
       })
@@ -31,85 +31,65 @@ export default function Home() {
   const [topText, setTopText] = useState('');
 
   // Define the slected template to have info about background selection by the user;
-
-  const [selectedTemplate, setSelectedTemplate] = useState(
-    'https://api.memegen.link/images/awesome.png',
-  );
+  const [imageId, setImageId] = useState('awesome');
   // Image url to display the preview of the image and further download
-  const [imageURL, setImageURL] = useState(
+  const [imageUrl, setImageUrl] = useState(
     'https://api.memegen.link/images/awesome.png',
   );
 
-  // We want to track the texts on input change
-  const trackBottomText = (event) => {
-    setBottomText(event.target.value);
-    const rawBottomText = event.target.value
+  const replaceSpecialCharecters = (inputArray) => {
+    return inputArray
       .replaceAll('#', '~h')
       .replaceAll('?', '~q')
       .replaceAll('/', '~s');
-
-    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
-    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
-    const newURl = `${blankURL}/${topText ? topText : '_'}/${
-      // Generate a new url having top text bottom text
-      rawBottomText ? rawBottomText : '_'
-    }${fileType}`;
-
-    setImageURL(newURl); // Set image url to show in the preview
-  };
-  const trackTopText = (event) => {
-    setTopText(event.target.value);
-    const rawTopText = event.target.value
-      .replaceAll('#', '~h')
-      .replaceAll('?', '~q')
-      .replaceAll('/', '~s');
-
-    const rawTopTextArray = rawTopText.split(' ');
-    console.log(rawTopTextArray);
-    const newTopText = rawTopTextArray.join('%20');
-    console.log(newTopText);
-    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
-    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
-    const newURl = `${blankURL}/${rawTopText ? newTopText : '_'}/${
-      // Generate a new url having top text bottom text
-      bottomText ? bottomText : '_'
-    }${fileType}`;
-    console.log(imageURL);
-    setImageURL(newURl); // Set image url to show in the preview
   };
 
-  // Then need to track the slected background
-  const trackSelection = (event) => {
-    setSelectedTemplate(event.target.value);
+  const urlGenerator = (currentTopText, currentBottomText, currentImageId) => {
+    const newCurrentTopText = replaceSpecialCharecters(currentTopText);
+    const newCurrentBottomText = replaceSpecialCharecters(currentBottomText);
+    const newUrl = `https://api.memegen.link/images/${currentImageId}/${
+      currentTopText ? newCurrentTopText : '_'
+    }/${currentBottomText ? newCurrentBottomText : '_'}.png`;
+    const newUrlArray = newUrl.split(' ');
+    const finalUrl = newUrlArray.join('-');
+    return finalUrl;
   };
 
-  // The function to generate the preview set the image url based on the user's selected background
-
-  const generate = () => {
-    const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
-    const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
-    const newURl = `${blankURL}/${topText ? topText : '_'}/${
-      // Generate a new url having top text bottom text
-      bottomText ? bottomText : '_'
-    }${fileType}`;
-
-    setImageURL(newURl); // Set image url to show in the preview
-  };
-
-  // Handle submit form
+  // Handle submit form in order to prevent reload page
   const handleSubmit = (event) => {
     event.preventDefault();
   };
 
+  const trackTopText = (event) => {
+    setTopText(event.target.value);
+    const newImageUrl = urlGenerator(event.target.value, bottomText, imageId);
+    setImageUrl(newImageUrl);
+  };
+
+  // We want to track the texts on input change
+  const trackBottomText = (event) => {
+    setBottomText(event.target.value);
+    const newImageUrl = urlGenerator(topText, event.target.value, imageId);
+    setImageUrl(newImageUrl);
+  };
+
+  // Then need to track the slected background
+  const trackSelection = (event) => {
+    setImageId(event.target.value);
+    const newImageUrl = urlGenerator(topText, bottomText, event.target.value);
+    setImageUrl(newImageUrl);
+  };
+
+  // The function to generate the preview set the image url based on the user's selected background
+
   const dowloadhandler = () => {
-    const fileName = imageURL
+    const fileName = imageUrl
       .replace('https://api.memegen.link/images/', '') // We need to find the image name from the url
       .replace(/\//gm, '')
       .replaceAll('~h', '#')
       .replaceAll('~s', '/')
       .replaceAll('/[_]/g', ' /[ ]/g');
-    console.log(fileName);
-    saveAs(imageURL, fileName);
+    saveAs(imageUrl, fileName);
   };
 
   return (
@@ -140,36 +120,33 @@ export default function Home() {
           />
           <br />
           {/* Select background  */}
-          <label htmlFor="memetemplate">
-            {' '}
-            Meme template
-            {apiData.length ? (
-              <select
-                className="selectItem"
-                id="memetemplate"
-                onChange={trackSelection}
-              >
-                {' '}
-                <option>Select Templates</option>
-                {apiData.map((obj) => (
-                  <option key={obj.value} value={obj.value}>
-                    {obj.label}
-                  </option>
-                ))}
-              </select>
-            ) : null}
-          </label>
-          {console.log(imageURL)}
-          <img data-test-id="meme-image" src={imageURL} alt="Italian Trulli" />
+          <label htmlFor="memetemplate">Meme template</label>
+          {apiData.length ? (
+            <select
+              className="selectItem"
+              id="memetemplate"
+              onChange={trackSelection}
+            >
+              {' '}
+              <option>Select Templates</option>
+              {apiData.map((obj) => (
+                <option key={obj.value} value={obj.value}>
+                  {obj.label}
+                </option>
+              ))}
+            </select>
+          ) : null}
+
+          <img data-test-id="meme-image" src={imageUrl} alt="Italian Trulli" />
           <div className="action">
             {/* generate button  */}
-            <button
-              onClick={generate}
+            {/* <button
+              onClick={() => {}}
               className="action-button"
               data-test-id="generate-meme"
             >
               Generate
-            </button>
+            </button> */}
             {/* Download Button  */}
             <button onClick={dowloadhandler} className="action-button">
               Download
