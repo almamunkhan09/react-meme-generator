@@ -63,9 +63,14 @@ export default function Home() {
       .replaceAll('#', '~h')
       .replaceAll('?', '~q')
       .replaceAll('/', '~s');
+
+    const rawTopTextArray = rawTopText.split(' ');
+    console.log(rawTopTextArray);
+    const newTopText = rawTopTextArray.join('%20');
+    console.log(newTopText);
     const blankURL = selectedTemplate.replace(/.(?:jpg|gif|png)$/, ''); // Split the url without file type
     const fileType = selectedTemplate.replace(blankURL, ''); // Find the file type
-    const newURl = `${blankURL}/${rawTopText ? rawTopText : '_'}/${
+    const newURl = `${blankURL}/${rawTopText ? newTopText : '_'}/${
       // Generate a new url having top text bottom text
       bottomText ? bottomText : '_'
     }${fileType}`;
